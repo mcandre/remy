@@ -1,0 +1,27 @@
+[package]
+
+name = "remy"
+description = "quickly port Rust applications to different platforms"
+version = "0.0.1"
+authors = ["Andrew Pennebaker <andrew.pennebaker@gmail.com>"]
+license = "BSD-2-Clause"
+homepage = "https://github.com/mcandre/remy"
+documentation = "https://docs.rs/releases/search?query=remy"
+
+[dependencies]
+lazy_static = "1.1.0"
+getopts = "0.2.18"
+tinyrick = { version = "0.0.9", optional = true }
+tinyrick_extras = { version = "0.0.3", optional = true }
+
+[features]
+letmeout = ["tinyrick", "tinyrick_extras"]
+
+[[bin]]
+name = "remy"
+path = "src/remy.rs"
+
+[[bin]]
+name = "tinyrick"
+path = "tinyrick.rs"
+required-features = ["letmeout"]
