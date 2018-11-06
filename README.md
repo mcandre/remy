@@ -1,5 +1,7 @@
 # remy: *sous-chef de métro*
 
+![pizza rat](https://raw.githubusercontent.com/mcandre/remy/master/remy.gif)
+
 # EXAMPLE
 
 ```console
@@ -16,8 +18,6 @@ target/bin
 └── x86_64-unknown-linux-gnu
     └── hello
 ```
-
-![pizza rat](https://raw.githubusercontent.com/mcandre/remy/master/remy.gif)
 
 See `remy -h` for more details.
 
