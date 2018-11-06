@@ -46,6 +46,15 @@ pub fn new_portconfig() -> PortConfig {
   }
 }
 
+/// Supply the standard executable suffix for a given target environment
+pub fn executable_suffix(target : &str) -> &str {
+  if target.contains("windows") {
+    ".exe"
+  } else {
+    ""
+  }
+}
+
 /// Generate application ports based on a PortConfig and a collection of binary basenames
 pub fn port(portconfig : &PortConfig, binaries : Vec<String>) {
   for binary in binaries {
@@ -110,13 +119,7 @@ pub fn port(portconfig : &PortConfig, binaries : Vec<String>) {
         "debug"
       };
 
-      let suffix = if target.contains("windows") {
-        ".exe"
-      } else {
-        ""
-      };
-
-      let binary_filename : &str = &format!("{}{}", binary, suffix);
+      let binary_filename : &str = &format!("{}{}", binary, executable_suffix(target));
 
       let port_path = path::Path::new("target")
         .join(target)

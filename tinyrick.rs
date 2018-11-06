@@ -6,6 +6,7 @@ extern crate tinyrick_extras;
 
 use std::env;
 use std::fs;
+use std::io;
 use std::path;
 
 /// Generate documentation
@@ -89,6 +90,57 @@ fn publish() {
   tinyrick_extras::publish();
 }
 
+/// Generate application ports for remy itself
+fn port() {
+  tinyrick::deps(test);
+
+  let binaries : &[&str] = &["remy"];
+
+  tinyrick::exec!("remy", binaries);
+
+  let banner : &str = &format!("{}-{}", env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"));
+  let archive_path : &str = &format!("{}.zip", banner);
+
+  let zip_file : fs::File = fs::File::create(archive_path).unwrap();
+  let zip_writer : &mut zip::ZipWriter<fs::File> = &mut zip::ZipWriter::new(zip_file);
+  let file_options : zip::write::FileOptions = zip::write::FileOptions::default();
+
+  for binary in binaries.iter() {
+    for platform in remy::PLATFORMS.iter() {
+      let target = &platform.target;
+      let suffix = remy::executable_suffix(target);
+      let binary_filename = &format!("{}{}", binary, suffix);
+
+      let source_pathbuf : path::PathBuf = path::Path::new("target")
+        .join("bin")
+        .join(target)
+        .join(binary_filename);
+
+      let source_path_str : &str = source_pathbuf
+        .to_str()
+        .unwrap();
+
+      let destination_path : path::PathBuf = path::Path::new(banner)
+        .join(target)
+        .join(binary_filename);
+
+      let destination_path_str : &str = destination_path
+        .to_str()
+        .unwrap();
+
+      let entry_file : &mut fs::File = &mut fs::File::open(source_path_str).unwrap();
+      zip_writer.start_file(destination_path_str, file_options).unwrap();
+      io::copy(entry_file, zip_writer).unwrap();
+    }
+  }
+}
+
+fn clean_port() {
+  for p in glob::glob("*.zip").unwrap() {
+    fs::remove_file(p.unwrap()).unwrap();
+  }
+}
+
 /// Remove cargo target directory
 fn clean_target() {
   let target_path = path::Path::new("example")
@@ -99,6 +151,7 @@ fn clean_target() {
 
 /// Clean workspaces
 fn clean() {
+  tinyrick::deps(clean_port);
   tinyrick::deps(clean_target);
   tinyrick_extras::clean_cargo();
 }
@@ -117,6 +170,8 @@ fn main() {
     images,
     test,
     publish,
+    port,
+    clean_port,
     clean_target,
     clean
   );

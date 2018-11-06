@@ -25,6 +25,18 @@ See `remy -h` for more details.
 
 remy quickly generates Rust ports for multiple target environments, by running your Rust project through an array of Docker containers for different target toolchains.
 
+# DOWNLOADS
+
+https://github.com/mcandre/remy/releases
+
+# CRATE
+
+https://crates.io/crates/remy
+
+# API DOCUMENTATION
+
+https://docs.rs/releases/search?query=remy
+
 # RUNTIME REQUIREMENTS
 
 * [Cargo](https://www.rust-lang.org/en-US/)
