@@ -36,10 +36,16 @@ $ tinyrick [build]
 $ tinyrick port
 ```
 
-# PUBLISH
+# PUBLISH CRATE
 
 ```console
 $ tinyrick publish
+```
+
+# PUBLISH DOCKER IMAGES
+
+```console
+$ tinyrick publish_docker
 ```
 
 # CLEAN

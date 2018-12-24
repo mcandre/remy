@@ -90,6 +90,21 @@ fn publish() {
     tinyrick_extras::publish();
 }
 
+/// Publish Docker images
+fn publish_docker() {
+    for platform in remy::PLATFORMS.iter() {
+        let title : &str = &format!("mcandre/remy:{}", platform.image_tag);
+
+        tinyrick::exec!(
+            "docker",
+            &[
+                "push",
+                title
+            ]
+        );
+    }
+}
+
 /// Generate application ports for remy itself
 fn port() {
     tinyrick::deps(test);
@@ -170,6 +185,7 @@ fn main() {
         images,
         test,
         publish,
+        publish_docker,
         port,
         clean_port,
         clean_target,
