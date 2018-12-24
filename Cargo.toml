@@ -2,7 +2,7 @@
 
 name = "remy"
 description = "quickly port Rust applications to different platforms"
-version = "0.0.1"
+version = "0.0.2"
 authors = ["Andrew Pennebaker <andrew.pennebaker@gmail.com>"]
 license = "BSD-2-Clause"
 homepage = "https://github.com/mcandre/remy"
