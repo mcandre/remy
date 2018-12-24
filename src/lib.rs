@@ -20,7 +20,7 @@ lazy_static::lazy_static! {
         target: "x86_64-unknown-linux-gnu".to_string()
     },
     Platform{
-        image_tag: "i686-unknown-linux-gnu".to_string(),
+        image_tag: "x86_64-unknown-linux-gnu".to_string(),
         target: "i686-unknown-linux-gnu".to_string()
     },
     Platform{

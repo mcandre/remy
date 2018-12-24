@@ -40,7 +40,7 @@ fn images() {
     for platform in remy::PLATFORMS.iter() {
         let title : &str = &format!("mcandre/remy:{}", platform.image_tag);
 
-        let dockerfile_str : &str = &format!("{}.Dockerfile", platform.target);
+        let dockerfile_str : &str = &format!("{}.Dockerfile", platform.image_tag);
 
         let current_directory_pathbuf : path::PathBuf = env::current_dir()
         .unwrap();
