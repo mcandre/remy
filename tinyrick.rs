@@ -43,20 +43,20 @@ fn images() {
         let dockerfile_str : &str = &format!("{}.Dockerfile", platform.image_tag);
 
         let current_directory_pathbuf : path::PathBuf = env::current_dir()
-        .unwrap();
+            .unwrap();
 
         let current_directory_str : &str = current_directory_pathbuf
-        .as_path()
-        .to_str()
-        .unwrap();
+            .as_path()
+            .to_str()
+            .unwrap();
 
         tinyrick::exec!(
             "docker",
             &[
-            "build",
-            "-t", title,
-            "-f", dockerfile_str,
-            current_directory_str
+                "build",
+                "-t", title,
+                "-f", dockerfile_str,
+                current_directory_str
             ]
         );
     }
@@ -70,12 +70,12 @@ fn test() {
 
     assert!(
         tinyrick::exec_mut!("remy")
-        .args(&["hello"])
-        .current_dir("example")
-        .env("VERBOSE", "1")
-        .status()
-        .unwrap()
-        .success()
+            .args(&["hello"])
+            .current_dir("example")
+            .env("VERBOSE", "1")
+            .status()
+            .unwrap()
+            .success()
     );
 }
 
@@ -127,21 +127,21 @@ fn port() {
             let binary_filename = &format!("{}{}", binary, suffix);
 
             let source_pathbuf : path::PathBuf = path::Path::new("target")
-            .join("bin")
-            .join(target)
-            .join(binary_filename);
+                .join("bin")
+                .join(target)
+                .join(binary_filename);
 
             let source_path_str : &str = source_pathbuf
-            .to_str()
-            .unwrap();
+                .to_str()
+                .unwrap();
 
             let destination_path : path::PathBuf = path::Path::new(banner)
-            .join(target)
-            .join(binary_filename);
+                .join(target)
+                .join(binary_filename);
 
             let destination_path_str : &str = destination_path
-            .to_str()
-            .unwrap();
+                .to_str()
+                .unwrap();
 
             let entry_file : &mut fs::File = &mut fs::File::open(source_path_str).unwrap();
             zip_writer.start_file(destination_path_str, file_options).unwrap();
@@ -159,7 +159,7 @@ fn clean_port() {
 /// Remove cargo target directory
 fn clean_target() {
     let target_path = path::Path::new("example")
-    .join("target");
+        .join("target");
 
     fs::remove_dir_all(target_path).unwrap();
 }
