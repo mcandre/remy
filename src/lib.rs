@@ -63,15 +63,15 @@ pub fn port(portconfig : &PortConfig, binaries : Vec<String>) {
             let tagged_image : &str = &format!("{}:{}", portconfig.image, platform.image_tag);
 
             let cur_dir_canonical_pathbuf : path::PathBuf = env::current_dir()
-            .unwrap()
-            .as_path()
-            .canonicalize()
-            .unwrap();
+                .unwrap()
+                .as_path()
+                .canonicalize()
+                .unwrap();
 
             let cur_dir_canonical_str : &str = cur_dir_canonical_pathbuf
-            .as_path()
-            .to_str()
-            .unwrap();
+                .as_path()
+                .to_str()
+                .unwrap();
 
             let mount_join : &str = &format!(
                 "{}:/src",
@@ -94,49 +94,49 @@ pub fn port(portconfig : &PortConfig, binaries : Vec<String>) {
             let command_bare : &mut process::Command = &mut process::Command::new("docker");
 
             let command : &mut process::Command = command_bare
-            .args(&[
-                "run",
-                "--rm",
-                "-v", mount_join,
-                tagged_image,
-                "sh", "-c", build_command
+                .args(&[
+                    "run",
+                    "--rm",
+                    "-v", mount_join,
+                    tagged_image,
+                    "sh", "-c", build_command
                 ]);
 
-                if portconfig.is_verbose {
-                    println!("{:?}", command);
-                }
+            if portconfig.is_verbose {
+                println!("{:?}", command);
+            }
 
-                assert!(
-                    command
+            assert!(
+                command
                     .status()
                     .unwrap()
                     .success()
-                );
+            );
 
-                let build_mode = if portconfig.is_release {
-                    "release"
-                } else {
-                    "debug"
-                };
+            let build_mode = if portconfig.is_release {
+                "release"
+            } else {
+                "debug"
+            };
 
-                let binary_filename : &str = &format!("{}{}", binary, executable_suffix(target));
+            let binary_filename : &str = &format!("{}{}", binary, executable_suffix(target));
 
-                let port_path = path::Path::new("target")
+            let port_path = path::Path::new("target")
                 .join(target)
                 .join(build_mode)
                 .join(binary_filename);
 
-                let bin_target = path::Path::new("target")
+            let bin_target = path::Path::new("target")
                 .join("bin")
                 .join(target);
 
-                let merged_port_path = bin_target
+            let merged_port_path = bin_target
                 .join(binary_filename);
 
-                fs::create_dir_all(bin_target)
+            fs::create_dir_all(bin_target)
                 .unwrap();
-                fs::copy(port_path, merged_port_path)
+            fs::copy(port_path, merged_port_path)
                 .unwrap();
-            }
         }
     }
+}
