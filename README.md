@@ -15,6 +15,8 @@ target/bin
 │   └── hello
 ├── i686-unknown-linux-gnu
 │   └── hello
+├── x86_64-unknown-cloudabi
+│   └── hello
 └── x86_64-unknown-linux-gnu
     └── hello
 ```
@@ -64,7 +66,6 @@ For more details on developing remy itself, see [DEVELOPMENT.md](DEVELOPMENT.md)
 
 # SEE ALSO
 
-* [CloudABI](https://nuxi.nl/) provides a C-level abstraction for applications to run on many different platforms.
 * [cartel](https://github.com/mcandre/cartel) provides Docker images for C/C++ cross-compilation toolchains
 * [goxcart](https://github.com/mcandre/goxcart) generates Go application ports based on the standard Go toolchain
 * [tonixxx](https://github.com/mcandre/tonixxx) provides a more heavyweight solution using virtual machines

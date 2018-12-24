@@ -15,18 +15,22 @@ pub struct Platform {
 
 lazy_static::lazy_static! {
     pub static ref PLATFORMS : Vec<Platform> = vec![
-    Platform{
-        image_tag: "x86_64-unknown-linux-gnu".to_string(),
-        target: "x86_64-unknown-linux-gnu".to_string()
-    },
-    Platform{
-        image_tag: "x86_64-unknown-linux-gnu".to_string(),
-        target: "i686-unknown-linux-gnu".to_string()
-    },
-    Platform{
-        image_tag: "arm-unknown-linux-gnueabi".to_string(),
-        target: "arm-unknown-linux-gnueabi".to_string()
-    }
+        Platform{
+            image_tag: "x86_64-unknown-linux-gnu".to_string(),
+            target: "x86_64-unknown-linux-gnu".to_string()
+        },
+        Platform{
+            image_tag: "x86_64-unknown-linux-gnu".to_string(),
+            target: "i686-unknown-linux-gnu".to_string()
+        },
+        Platform{
+            image_tag: "arm-unknown-linux-gnueabi".to_string(),
+            target: "arm-unknown-linux-gnueabi".to_string()
+        },
+        Platform{
+            image_tag: "x86_64-unknown-cloudabi".to_string(),
+            target: "x86_64-unknown-cloudabi".to_string()
+        },
     ];
 }
 
