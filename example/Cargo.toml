@@ -7,3 +7,7 @@ authors = ["Andrew Pennebaker <andrew.pennebaker@gmail.com>"]
 [[bin]]
 name = "hello"
 path = "hello.rs"
+
+[dependencies]
+argdata = "^0.1"
+cloudabi = "^0.0.3"

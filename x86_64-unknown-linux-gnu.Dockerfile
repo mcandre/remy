@@ -1,8 +1,9 @@
 FROM mcandre/cartel:debian-x86_64
 ENV PATH $PATH:/root/.cargo/bin
 RUN apt-get update && \
-    apt-get install -y curl gcc && \
+    apt-get install -y curl && \
     curl https://sh.rustup.rs -sSf | sh -s -- -y && \
+    rustup update nightly && \
     rustup target add i686-unknown-linux-gnu && \
     apt-get remove -y curl && \
     apt-get autoremove -y && \
