@@ -170,11 +170,14 @@ fn port() {
 }
 
 fn clean_port() {
-    glob::glob("*.zip")
-        .map(|paths|
-            paths.map(|p_res| p_res.map(|p| fs::remove_file(p)))
-        )
-        .is_ok();
+    match glob::glob("*.zip") {
+        Ok(path_results) => {
+            for p in path_results.flat_map(|p_res| p_res) {
+                fs::remove_file(p).is_ok();
+            }
+        }
+        _ => {}
+    }
 }
 
 /// Remove cargo target directory
