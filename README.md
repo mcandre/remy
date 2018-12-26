@@ -21,6 +21,8 @@ target/bin
     └── hello
 ```
 
+Target types can be skipped with `-e <pattern>`, e.g. `-e cloudabi`.
+
 See `remy -h` for more details.
 
 # ABOUT

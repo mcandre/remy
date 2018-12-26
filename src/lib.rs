@@ -1,7 +1,8 @@
 //! Porting defaults
 
-// extern crate lazy_static;
+extern crate regex;
 
+use regex::Regex;
 use std::env;
 use std::fs;
 use std::path;
@@ -10,26 +11,31 @@ use std::process;
 /// A Platform details a Docker and cargo build target configuration for building Rust applications
 pub struct Platform {
     pub image_tag : String,
-    pub target : String
+    pub target : String,
+    pub features : String
 }
 
 lazy_static::lazy_static! {
     pub static ref PLATFORMS : Vec<Platform> = vec![
         Platform{
             image_tag: "x86_64-unknown-linux-gnu".to_string(),
-            target: "x86_64-unknown-linux-gnu".to_string()
+            target: "x86_64-unknown-linux-gnu".to_string(),
+            features: "".to_string()
         },
         Platform{
             image_tag: "x86_64-unknown-linux-gnu".to_string(),
-            target: "i686-unknown-linux-gnu".to_string()
+            target: "i686-unknown-linux-gnu".to_string(),
+            features: "".to_string()
         },
         Platform{
             image_tag: "arm-unknown-linux-gnueabi".to_string(),
-            target: "arm-unknown-linux-gnueabi".to_string()
+            target: "arm-unknown-linux-gnueabi".to_string(),
+            features: "".to_string()
         },
         Platform{
             image_tag: "x86_64-unknown-cloudabi".to_string(),
-            target: "x86_64-unknown-cloudabi".to_string()
+            target: "x86_64-unknown-cloudabi".to_string(),
+            features: "cloudlibc".to_string()
         },
     ];
 }
@@ -38,7 +44,8 @@ lazy_static::lazy_static! {
 pub struct PortConfig {
     pub image : String,
     pub is_release : bool,
-    pub is_verbose : bool
+    pub is_verbose : bool,
+    pub target_exclusions : Vec<Regex>
 }
 
 /// Build a default PortConfig
@@ -46,7 +53,8 @@ pub fn new_portconfig() -> PortConfig {
     PortConfig{
         image: "mcandre/remy".to_string(),
         is_release: true,
-        is_verbose: false
+        is_verbose: false,
+        target_exclusions: vec![]
     }
 }
 
@@ -64,6 +72,11 @@ pub fn port(portconfig : &PortConfig, binaries : Vec<String>) {
     for binary in binaries {
         for platform in PLATFORMS.iter() {
             let target : &str = &platform.target;
+
+            if portconfig.target_exclusions.iter().any(|exclusion| exclusion.is_match(target)) {
+                continue;
+            }
+
             let tagged_image : &str = &format!("{}:{}", portconfig.image, platform.image_tag);
 
             let cur_dir_canonical_pathbuf : path::PathBuf = env::current_dir()
@@ -88,11 +101,18 @@ pub fn port(portconfig : &PortConfig, binaries : Vec<String>) {
                 ""
             };
 
+            let feature_flag = if platform.features != "" {
+                format!(" --features {}", platform.features)
+            } else {
+                "".to_string()
+            };
+
             let build_command : &str = &format!(
-                "cd /src && cargo build --target {} --bin {}{}",
+                "cd /src && cargo build --target {} --bin {}{}{}",
                 target,
                 binary,
-                release_flag
+                release_flag,
+                feature_flag
             );
 
             let command_bare : &mut process::Command = &mut process::Command::new("docker");

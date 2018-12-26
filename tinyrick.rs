@@ -1,9 +1,11 @@
 //! Build configuration
 
+extern crate regex;
 extern crate remy;
 extern crate tinyrick;
 extern crate tinyrick_extras;
 
+use regex::Regex;
 use std::env;
 use std::fs;
 use std::io;
@@ -69,8 +71,7 @@ fn test() {
     tinyrick::deps(images);
 
     assert!(
-        tinyrick::exec_mut!("remy")
-            .args(&["hello"])
+        tinyrick::exec_mut!("remy", &["hello"])
             .current_dir("example")
             .env("VERBOSE", "1")
             .status()
@@ -109,9 +110,17 @@ fn publish_docker() {
 fn port() {
     tinyrick::deps(test);
 
-    let binaries : &[&str] = &["remy"];
+    let binaries = vec!["remy"];
 
-    tinyrick::exec!("remy", binaries);
+    let target_exclusions_str = vec!["cloudabi"];
+
+    let args_vec : &mut Vec<&str> = &mut target_exclusions_str
+        .iter()
+        .flat_map(|target_exclusion_str| vec!["-e", target_exclusion_str])
+        .collect();
+    args_vec.extend(&binaries);
+
+    tinyrick::exec!("remy", &args_vec[..]);
 
     let banner : &str = &format!("{}-{}", env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"));
     let archive_path : &str = &format!("{}.zip", banner);
@@ -120,9 +129,19 @@ fn port() {
     let zip_writer : &mut zip::ZipWriter<fs::File> = &mut zip::ZipWriter::new(zip_file);
     let file_options : zip::write::FileOptions = zip::write::FileOptions::default();
 
+    let target_exclusions : Vec<Regex> = target_exclusions_str
+        .iter()
+        .map(|target_exclusion_str| Regex::new(target_exclusion_str).unwrap())
+        .collect();
+
     for binary in binaries.iter() {
         for platform in remy::PLATFORMS.iter() {
             let target = &platform.target;
+
+            if target_exclusions.iter().any(|exclusion| exclusion.is_match(target)) {
+                continue;
+            }
+
             let suffix = remy::executable_suffix(target);
             let binary_filename = &format!("{}{}", binary, suffix);
 
@@ -151,9 +170,11 @@ fn port() {
 }
 
 fn clean_port() {
-    for p in glob::glob("*.zip").unwrap() {
-        fs::remove_file(p.unwrap()).unwrap();
-    }
+    glob::glob("*.zip")
+        .map(|paths|
+            paths.map(|p_res| p_res.map(|p| fs::remove_file(p)))
+        )
+        .is_ok();
 }
 
 /// Remove cargo target directory
@@ -161,7 +182,7 @@ fn clean_target() {
     let target_path = path::Path::new("example")
         .join("target");
 
-    fs::remove_dir_all(target_path).unwrap();
+    fs::remove_dir_all(target_path).is_ok();
 }
 
 /// Clean workspaces

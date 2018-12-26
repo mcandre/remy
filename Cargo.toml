@@ -9,12 +9,13 @@ homepage = "https://github.com/mcandre/remy"
 documentation = "https://docs.rs/releases/search?query=remy"
 
 [dependencies]
-lazy_static = "1.1.0"
-getopts = "0.2.18"
-tinyrick = { version = "0.0.9", optional = true }
-tinyrick_extras = { version = "0.0.3", optional = true }
-zip = { version = "0.4.2", optional = true }
-glob = { version = "0.2.11", optional = true }
+regex = "^1.1"
+lazy_static = "^1.1"
+getopts = "^0.2.18"
+tinyrick = { version = "^0.0.9", optional = true }
+tinyrick_extras = { version = "^0.0.3", optional = true }
+zip = { version = "^0.4", optional = true }
+glob = { version = "^0.2", optional = true }
 
 [features]
 letmeout = ["tinyrick", "tinyrick_extras", "zip", "glob"]

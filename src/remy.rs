@@ -1,8 +1,10 @@
 //! CLI application
 
 extern crate getopts;
+extern crate regex;
 extern crate remy;
 
+use regex::Regex;
 use std::env;
 use std::process;
 
@@ -26,12 +28,16 @@ fn main() {
     }
 
     let args : Vec<String> = env::args().collect();
+
     let program : &str = args[0].as_ref();
     let brief = format!("Usage: {} [options] <binary> [<binary> [<binary>...]]", program);
 
+    let exclude_target_flag = "exclude-target";
+
     let mut opts : getopts::Options = getopts::Options::new();
-    opts.optflag("h", "help", "print usage info");
-    opts.optflag("v", "version", "print version info");
+    opts.optmulti("e", exclude_target_flag, "Skip target pattern", "EXCLUSION");
+    opts.optflag("h", "help", "Print usage info");
+    opts.optflag("v", "version", "Print version info");
     opts.optflag("r", "release", "Enable release mode");
 
     let optresult : Result<getopts::Matches, getopts::Fail> = opts.parse(&args[1..]);
@@ -52,6 +58,12 @@ fn main() {
         usage(&brief, &opts);
         process::exit(0);
     }
+
+    portconfig.target_exclusions = optmatches
+        .opt_strs(exclude_target_flag)
+        .into_iter()
+        .map(|exclusion| Regex::new(exclusion.as_str()).unwrap())
+        .collect();
 
     let binaries : Vec<String> = optmatches.free;
 
