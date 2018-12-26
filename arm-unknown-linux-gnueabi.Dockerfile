@@ -4,6 +4,7 @@ RUN apt-get update && \
     apt-get install -y curl && \
     curl https://sh.rustup.rs -sSf | sh -s -- -y && \
     rustup update nightly && \
+    rustup default nightly && \
     rustup target add arm-unknown-linux-gnueabi && \
     apt-get remove -y curl && \
     apt-get autoremove -y && \
