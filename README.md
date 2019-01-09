@@ -71,3 +71,4 @@ For more details on developing remy itself, see [DEVELOPMENT.md](DEVELOPMENT.md)
 * [cartel](https://github.com/mcandre/cartel) provides Docker images for C/C++ cross-compilation toolchains
 * [goxcart](https://github.com/mcandre/goxcart) generates Go application ports based on the standard Go toolchain
 * [tonixxx](https://github.com/mcandre/tonixxx) provides a more heavyweight solution using virtual machines
+* [trust](https://github.com/japaric/trust) integrates CI systems with Rust ports.
