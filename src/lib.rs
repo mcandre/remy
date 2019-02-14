@@ -37,6 +37,11 @@ lazy_static::lazy_static! {
             target: "x86_64-unknown-cloudabi".to_string(),
             features: "cloudlibc".to_string()
         },
+        Platform{
+            image_tag: "wasm32".to_string(),
+            target: "wasm32-unknown-unknown".to_string(),
+            features: "".to_string()
+        },
     ];
 }
 
@@ -62,6 +67,8 @@ pub fn new_portconfig() -> PortConfig {
 pub fn executable_suffix(target : &str) -> &str {
     if target.contains("windows") {
         ".exe"
+    } else if target.contains("wasm") {
+        ".wasm"
     } else {
         ""
     }

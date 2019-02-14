@@ -15,6 +15,8 @@ target/bin
 │   └── hello
 ├── i686-unknown-linux-gnu
 │   └── hello
+├── wasm32-unknown-unknown
+│   └── hello.wasm
 ├── x86_64-unknown-cloudabi
 │   └── hello
 └── x86_64-unknown-linux-gnu
